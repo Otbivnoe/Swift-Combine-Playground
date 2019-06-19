@@ -35,8 +35,6 @@ example("Just") {
 
 // https://developer.apple.com/documentation/combine/publishers/once
 example("Once") {
-//    let once = Publishers.Once<Int, Never>(4)
-//    let once = Publishers.Once<Int, PlaygroundError>(.failure(.error1))
     let once = Publishers.Once<String, PlaygroundError>(.success("🍇"))
 
     once.sink(receiveCompletion: { completion in

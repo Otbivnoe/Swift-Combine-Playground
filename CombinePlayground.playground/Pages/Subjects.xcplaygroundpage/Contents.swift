@@ -17,7 +17,7 @@ example("CurrentValueSubject") {
 example("PassthroughSubject") {
     let subject = PassthroughSubject<Int, Never>()
 
-    let _ = subject.sink(receiveCompletion: { (completion) in
+    subject.sink(receiveCompletion: { (completion) in
         print("PassthroughSubject completion = \(completion)")
     }, receiveValue: { value in
         print("PassthroughSubject value = \(value)")
@@ -40,18 +40,21 @@ example("Custom subject: LastValueSubject") {
     subject.send("🍐")
     subject.send("🍌")
 
-    subject.sink { print("Second subscriber received: \($0)") }
+    let subscriber = subject.sink { print("Second subscriber received: \($0)") }
+    subscriber.cancel()
+
+    subject.send("🍉")
 }
 
-example("Custom subject: BufferSubject") {
-    let subject = BufferSubject<String, Never>(maxValues: 3)
+example("Cancell") {
+    let subject = LastValueSubject<String, Never>()
 
-    subject.sink { print("First subscriber received: \($0)") }
+    let subscriber = subject.sink { print("First subscriber received: \($0)") }
     subject.send("🍐")
     subject.send("🍌")
-    subject.send("🍏")
 
-    subject.sink { print("Second subscriber received: \($0)") }
+    subscriber.cancel()
+    subject.send("🍉")
 }
 
 //: [Next](@next)

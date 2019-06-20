@@ -82,3 +82,23 @@ example("Deferred") {
         print("value = \(value)")
     })
 }
+
+example("AnyPublisher") {
+    let publisher = AnyPublisher<String, Never> { subscriber in
+        subscriber.receive("1")
+        subscriber.receive("2")
+        subscriber.receive("3")
+        subscriber.receive("4")
+    }
+
+    let subscriber = AnySubscriber <String, Never>(receiveSubscription: { subscription in
+        print("subscription = \(subscription)")
+    }, receiveValue: { value in
+        print("value = \(value)")
+        return .unlimited
+    }, receiveCompletion: { completion in
+        print("completion = \(completion)")
+    })
+
+    publisher.subscribe(subscriber)
+}
